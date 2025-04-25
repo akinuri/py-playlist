@@ -23,17 +23,19 @@ if input_type == "file":
 else:
     if not os.path.exists(input_dir):
         prog_exit("Directory does not exist.")
-    print("Scanning directory for mp3 files...")
+    input_dir_parent = os.path.dirname(input_dir)
+    input_dir_name = os.path.basename(input_dir)
+    print("Scanning the '%s' directory for mp3 files ..." % input_dir_name)
     input_files = get_mp3_files(input_dir)
     library = get_mp3_durations(input_files)
-    save_json(library, "library.json")
-print("Found %d songs in the library." % len(library))
+    save_json(library, os.path.join(input_dir_parent, input_dir_name + "-library.json"))
+print("Found %d songs." % len(library))
 
 
 vlc_playlist = []
 if is_vlc_running():
     vlc_playlist = get_vlc_playlist()
-print("Found %d songs in VLC." % len(vlc_playlist))
+print("Found %d songs in VLC playlist." % len(vlc_playlist))
 
 
 listened_files = []
