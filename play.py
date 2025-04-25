@@ -6,21 +6,25 @@ from helpers import *
 
 
 if len(sys.argv) == 1:
-    prog_exit("Drop a file (library.json) or a music folder.")
+    prog_exit("Drop a file (*-music.json) or a music folder.")
 
 
-input_dir = sys.argv[1]
-input_type = "dir" if os.path.isdir(input_dir) else "file"
+input_value = sys.argv[1]
+input_type = "dir" if os.path.isdir(input_value) else "file"
 
 
 library = []
 if input_type == "file":
-    if not input_dir.endswith(".json"):
+    input_file = input_value
+    if not input_file.endswith(".json"):
         prog_exit("Invalid file type. Only JSON files are supported.")
-    if not os.path.exists(input_dir):
+    if not os.path.exists(input_file):
         prog_exit("File does not exist.")
-    library = load_json(input_dir)
+    input_file_name = os.path.basename(input_file)
+    print("Loading the '%s' file for mp3 files ..." % input_file_name)
+    library = load_json(input_file)
 else:
+    input_dir = input_value
     if not os.path.exists(input_dir):
         prog_exit("Directory does not exist.")
     input_dir_parent = os.path.dirname(input_dir)
@@ -28,7 +32,7 @@ else:
     print("Scanning the '%s' directory for mp3 files ..." % input_dir_name)
     input_files = get_mp3_files(input_dir)
     library = get_mp3_durations(input_files)
-    save_json(library, os.path.join(input_dir_parent, input_dir_name + "-library.json"))
+    save_json(library, os.path.join(input_dir_parent, input_dir_name + "-music.json"))
 print("Found %d songs." % len(library))
 
 
