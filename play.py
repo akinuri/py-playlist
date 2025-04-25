@@ -1,6 +1,7 @@
 import os
 from random import shuffle
 import sys
+import time
 from helpers import *
 
 
@@ -61,3 +62,6 @@ print("Picked %d songs." % len(playlist))
 
 
 play_vlc_playlist(playlist)
+
+
+time.sleep(5)
