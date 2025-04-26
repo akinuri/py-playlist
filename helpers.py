@@ -97,11 +97,11 @@ def get_mp3_durations(mp3_files):
     library = []
     for mp3_file in mp3_files:
         duration = get_mp3_duration(mp3_file)
-        entry = {
+        item = {
             "path": mp3_file,
             "duration": duration,
         }
-        library.append(entry)
+        library.append(item)
     return library
 
 

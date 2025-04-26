@@ -50,12 +50,12 @@ print("Found %d songs in VLC playlist." % len(vlc_playlist))
 
 listened_files = []
 unlistened_files = []
-for entry in library:
-    path = entry["path"]
+for item in library:
+    path = item["path"]
     if path not in vlc_playlist:
-        unlistened_files.append(entry)
+        unlistened_files.append(item)
     else:
-        listened_files.append(entry)
+        listened_files.append(item)
 
 
 shuffle(unlistened_files)
