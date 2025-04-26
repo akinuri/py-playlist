@@ -46,7 +46,6 @@ else:
     total_duration = duration_str(total_duration)
     print("Total duration: %s" % total_duration)
     save_json(library, os.path.join(input_dir_parent, input_dir_name + "-music.json"))
-print("Found %d songs." % len(library))
 
 
 vlc_playlist = []
