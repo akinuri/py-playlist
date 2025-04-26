@@ -32,8 +32,6 @@ def get_vlc_playlist():
                     path = path.replace('file:///', '')
                     path = path.replace('/', '\\')
                     playlist.append(path)
-    else:
-        print("VLC is not running.")
     return playlist
 
 
