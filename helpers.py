@@ -50,6 +50,56 @@ def get_vlc_playlist_response():
     return response
 
 
+def get_vlc_state():
+    """Returns the current state of VLC."""
+    state = None
+    response = get_vlc_status_response()
+    if response is not None:
+        state = response["state"]
+    return state
+
+
+def get_vlc_status_response():
+    response = None
+    try:
+        response = requests.get("http://localhost:8080/requests/status.json", auth=("", "1234"), timeout=1)
+        if response.status_code != 200:
+            raise Exception("Status code is not 200.")
+        response = json.loads(response.text)
+    except Exception as e:
+        print(f"Error fetching VLC playlist: {e}")
+    return response
+
+
+def play_vlc_playlist_item(item_path):
+    """Finds and plays a specific item in the VLC playlist."""
+    item_id = get_vlc_playlist_item_id(item_path)
+    if item_id is None:
+        return False
+    url = f"http://localhost:8080/requests/status.xml?command=pl_play&id={item_id}"
+    response = requests.get(url, auth=("", 1234), timeout=1)
+    if response.status_code != 200:
+        return False
+    item_name = item_path.split("\\")[-1]
+    return item_id, item_name
+
+
+def get_vlc_playlist_item_id(item_path):
+    """Finds the ID of a VLC playlist item by its path."""
+    item_path = item_path.replace("\\", "/")
+    item_path = quote(item_path)
+    item_path = item_path.replace("D%3A", "D:")
+    item_path = item_path.replace("C%3A", "C:")
+    response = get_vlc_playlist_response()
+    if response is not None:
+        for item in response["children"]:
+            if item["name"] == "Playlist":
+                for child in item["children"]:
+                    if child["uri"].endswith(item_path):
+                        return child["id"]
+    return None
+
+
 def play_vlc_playlist(playlist):
     """Plays a list of songs in VLC."""
     # https://wiki.videolan.org/VLC_command-line_help/

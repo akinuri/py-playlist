@@ -76,4 +76,12 @@ print("Picked %d songs." % len(playlist))
 play_vlc_playlist(playlist)
 
 
+time.sleep(1)
+
+
+if get_vlc_state() == "stopped":
+    item_id, item_name = play_vlc_playlist_item(playlist[0])
+    print("Playing #%d: %s" % (int(item_id), item_name))
+
+
 time.sleep(5)
