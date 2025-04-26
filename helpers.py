@@ -104,6 +104,14 @@ def get_mp3_durations(mp3_files):
         library.append(entry)
     return library
 
+
+def get_total_duration(library):
+    """Returns the total duration of all songs in the library."""
+    total_duration = 0
+    for item in library:
+        total_duration += item["duration"]
+    return total_duration
+
 #endregion
 
 
