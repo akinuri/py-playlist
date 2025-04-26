@@ -8,6 +8,8 @@ import requests
 from urllib.parse import quote, unquote
 
 
+#region ==================== VLC
+
 def is_vlc_running():
     """Checks if the VLC process is running."""
     try:
@@ -48,6 +50,28 @@ def get_vlc_playlist_response():
     return response
 
 
+def play_vlc_playlist(playlist):
+    """Plays a list of songs in VLC."""
+    # https://wiki.videolan.org/VLC_command-line_help/
+    exe_path = "C:/Program Files/VideoLAN/VLC/vlc.exe"
+    args = [
+        "--one-instance",
+        "--playlist-enqueue",
+    ]
+    # expects playlist items to be in backslashes
+    cmd_args = [exe_path] + args + playlist
+    subprocess.Popen(
+        cmd_args,
+        stdin=None,
+        stdout=None,
+        stderr=None,
+    )
+
+#endregion
+
+
+#region ==================== MP3
+
 def get_mp3_files(input_dir):
     """Recursively get all mp3 files (paths) from the input directory."""
     files = []
@@ -80,6 +104,10 @@ def get_mp3_durations(mp3_files):
         library.append(entry)
     return library
 
+#endregion
+
+
+#region ==================== JSON
 
 def save_json(data, filename):
     """Saves data to a JSON file."""
@@ -93,24 +121,10 @@ def load_json(filename):
         data = json.load(f)
     return data
 
+#endregion
 
-def play_vlc_playlist(playlist):
-    """Plays a list of songs in VLC."""
-    # https://wiki.videolan.org/VLC_command-line_help/
-    exe_path = "C:/Program Files/VideoLAN/VLC/vlc.exe"
-    args = [
-        "--one-instance",
-        "--playlist-enqueue",
-    ]
-    # expects playlist items to be in backslashes
-    cmd_args = [exe_path] + args + playlist
-    subprocess.Popen(
-        cmd_args,
-        stdin=None,
-        stdout=None,
-        stderr=None,
-    )
-        
+
+#region ==================== PROG
 
 def prog_exit(*messages):
     """Exits the program with optional messages."""
@@ -122,6 +136,10 @@ def prog_exit(*messages):
     input("")
     sys.exit()
 
+#endregion
+
+
+#region ==================== INPUT
 
 def get_input_integer(msg, be_persistent=True, min=None, max=None):
     value = input(msg)
@@ -147,6 +165,10 @@ def get_input_integer(msg, be_persistent=True, min=None, max=None):
             raise ValueError("Number overflow.")
     return value
 
+#endregion
+
+
+#region ==================== DURATION
 
 def duration_str(duration_in_sec):
     """Converts a duration in seconds to a formatted string."""
@@ -160,4 +182,6 @@ def duration_str(duration_in_sec):
         duration_in_sec % dur_m,
     )
     return duration_str
+
+#endregion
 
