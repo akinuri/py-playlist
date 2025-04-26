@@ -23,6 +23,12 @@ if input_type == "file":
     input_file_name = os.path.basename(input_file)
     print("Loading the '%s' file for mp3 files ..." % input_file_name)
     library = load_json(input_file)
+    print("Found %d songs." % len(library))
+    total_duration = 0
+    for item in library:
+        total_duration += item["duration"]
+    total_duration = duration_str(total_duration)
+    print("Total duration: %s" % total_duration)
 else:
     input_dir = input_value
     if not os.path.exists(input_dir):
@@ -31,7 +37,14 @@ else:
     input_dir_name = os.path.basename(input_dir)
     print("Scanning the '%s' directory for mp3 files ..." % input_dir_name)
     input_files = get_mp3_files(input_dir)
+    print("Found %d songs." % len(input_files))
+    print("Getting durations ...")
     library = get_mp3_durations(input_files)
+    total_duration = 0
+    for item in library:
+        total_duration += item["duration"]
+    total_duration = duration_str(total_duration)
+    print("Total duration: %s" % total_duration)
     save_json(library, os.path.join(input_dir_parent, input_dir_name + "-music.json"))
 print("Found %d songs." % len(library))
 

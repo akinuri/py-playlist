@@ -1,4 +1,5 @@
 import json
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -144,4 +145,17 @@ def get_input_integer(msg, be_persistent=True, min=None, max=None):
         else:
             raise ValueError("Number overflow.")
     return value
+
+
+def duration_str(duration_in_sec):
+    dur_s = 1
+    dur_m = dur_s * 60
+    dur_h = dur_m * 60
+    dur_format = "%dh %dm %ds"
+    duration_str = dur_format % (
+        math.floor(duration_in_sec / dur_h),
+        math.floor((duration_in_sec % dur_h) / dur_m),
+        duration_in_sec % dur_m,
+    )
+    return duration_str
 
