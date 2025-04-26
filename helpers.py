@@ -9,7 +9,7 @@ from urllib.parse import quote, unquote
 
 
 def is_vlc_running():
-    """Check if the VLC process is running."""
+    """Checks if the VLC process is running."""
     try:
         output = subprocess.check_output("tasklist", shell=True, text=True)
         if "vlc.exe" in output:
@@ -20,7 +20,7 @@ def is_vlc_running():
 
 
 def get_vlc_playlist():
-    """Get the current VLC playlist song paths."""
+    """Returns a list of song paths from the VLC playlist."""
     playlist = []
     response = get_vlc_playlist_response()
     if response is not None:
@@ -36,12 +36,12 @@ def get_vlc_playlist():
 
 
 def get_vlc_playlist_response():
-    """Get the current VLC playlist."""
+    """Makes a request to the VLC HTTP interface to get the current playlist."""
     response = None
     try:
         response = requests.get("http://localhost:8080/requests/playlist.json", auth=("", "1234"), timeout=1)
         if response.status_code != 200:
-            raise Exception("Status code is not 200")
+            raise Exception("Status code is not 200.")
         response = json.loads(response.text)
     except Exception as e:
         print(f"Error fetching VLC playlist: {e}")
@@ -49,7 +49,7 @@ def get_vlc_playlist_response():
 
 
 def get_mp3_files(input_dir):
-    """Get all mp3 files from the input directory."""
+    """Recursively get all mp3 files (paths) from the input directory."""
     files = []
     for path in Path(input_dir).rglob("*.mp3"):
         path = str(path)
@@ -58,7 +58,7 @@ def get_mp3_files(input_dir):
 
 
 def get_mp3_duration(mp3_path):
-    """Get the duration of an mp3 file."""
+    """Returns the duration in seconds."""
     duration = 0
     try:
         probe = ffmpeg.probe(mp3_path)
@@ -69,6 +69,7 @@ def get_mp3_duration(mp3_path):
 
 
 def get_mp3_durations(mp3_files):
+    """Returns a list of dictionaries with mp3 file paths and their durations."""
     library = []
     for mp3_file in mp3_files:
         duration = get_mp3_duration(mp3_file)
@@ -81,19 +82,20 @@ def get_mp3_durations(mp3_files):
 
 
 def save_json(data, filename):
-    """Save data to a JSON file."""
+    """Saves data to a JSON file."""
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 
 def load_json(filename):
-    """Load data from a JSON file."""
+    """Loads data from a JSON file."""
     with open(filename, 'r', encoding='utf-8') as f:
         data = json.load(f)
     return data
 
 
 def play_vlc_playlist(playlist):
+    """Plays a list of songs in VLC."""
     # https://wiki.videolan.org/VLC_command-line_help/
     exe_path = "C:/Program Files/VideoLAN/VLC/vlc.exe"
     args = [
@@ -111,6 +113,7 @@ def play_vlc_playlist(playlist):
         
 
 def prog_exit(*messages):
+    """Exits the program with optional messages."""
     for message in messages:
         print(message)
         if message != "":
@@ -146,6 +149,7 @@ def get_input_integer(msg, be_persistent=True, min=None, max=None):
 
 
 def duration_str(duration_in_sec):
+    """Converts a duration in seconds to a formatted string."""
     dur_s = 1
     dur_m = dur_s * 60
     dur_h = dur_m * 60
