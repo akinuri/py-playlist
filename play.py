@@ -23,7 +23,7 @@ if input_type == "file":
     input_file_name = os.path.basename(input_file)
     print("Loading the '%s' file for mp3 files ..." % input_file_name)
     library = load_json(input_file)
-    print("Found %d songs." % len(library))
+    print("Found %d songs." % len(library["items"]))
     print("Total duration: %s" % library["total_duration_str"])
 else:
     input_dir = input_value
