@@ -146,8 +146,11 @@ def build_music_library(mp3_files):
     library = {
         "total_duration": 0,
         "total_duration_str": None,
+        "created_at": None,
+        "durs_scan_time": None,
         "items": [],
     }
+    sw_start = datetime.datetime.now()
     for mp3_file in mp3_files:
         duration = get_mp3_duration(mp3_file)
         item = {
@@ -156,7 +159,11 @@ def build_music_library(mp3_files):
         }
         library["items"].append(item)
         library["total_duration"] += duration
+    sw_end = datetime.datetime.now()
+    sw_elapsed = sw_end - sw_start
+    library["durs_scan_time"] = sw_elapsed.total_seconds()
     library["total_duration_str"] = duration_str(library["total_duration"])
+    library["created_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return library
 
 #endregion
