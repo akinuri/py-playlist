@@ -24,8 +24,7 @@ if input_type == "file":
     print("Loading the '%s' file for mp3 files ..." % input_file_name)
     library = load_json(input_file)
     print("Found %d songs." % len(library))
-    total_duration = duration_str(get_total_duration(library))
-    print("Total duration: %s" % total_duration)
+    print("Total duration: %s" % library["total_duration_str"])
 else:
     input_dir = input_value
     if not os.path.exists(input_dir):
@@ -36,9 +35,8 @@ else:
     input_files = get_mp3_files(input_dir)
     print("Found %d songs." % len(input_files))
     print("Getting durations ...")
-    library = get_mp3_durations(input_files)
-    total_duration = duration_str(get_total_duration(library))
-    print("Total duration: %s" % total_duration)
+    library = build_music_library(input_files)
+    print("Total duration: %s" % library["total_duration_str"])
     save_json(library, os.path.join(input_dir_parent, input_dir_name + "-music.json"))
 
 
@@ -50,7 +48,7 @@ print("Found %d songs in VLC playlist." % len(vlc_playlist))
 
 listened_files = []
 unlistened_files = []
-for item in library:
+for item in library["items"]:
     path = item["path"]
     if path not in vlc_playlist:
         unlistened_files.append(item)

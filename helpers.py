@@ -142,25 +142,22 @@ def get_mp3_duration(mp3_path):
     return duration
 
 
-def get_mp3_durations(mp3_files):
-    """Returns a list of dictionaries with mp3 file paths and their durations."""
-    library = []
+def build_music_library(mp3_files):
+    library = {
+        "total_duration": 0,
+        "total_duration_str": None,
+        "items": [],
+    }
     for mp3_file in mp3_files:
         duration = get_mp3_duration(mp3_file)
         item = {
             "path": mp3_file,
             "duration": duration,
         }
-        library.append(item)
+        library["items"].append(item)
+        library["total_duration"] += duration
+    library["total_duration_str"] = duration_str(library["total_duration"])
     return library
-
-
-def get_total_duration(library):
-    """Returns the total duration of all songs in the library."""
-    total_duration = 0
-    for item in library:
-        total_duration += item["duration"]
-    return total_duration
 
 #endregion
 
